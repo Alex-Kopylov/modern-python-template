@@ -9,6 +9,13 @@ default_stages: [pre-commit, pre-push]
 repos:
   - repo: local
     hooks:
+      # === PHASE 0: SECRETS ===
+      - id: gitleaks
+        name: gitleaks (secrets)
+        entry: mise exec -- gitleaks git --pre-commit --staged --redact --no-banner
+        language: system
+        pass_filenames: false
+
       # === PHASE 1: FORMATTING ===
       - id: ruff-format
         name: ruff (format)

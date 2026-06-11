@@ -1,7 +1,7 @@
 """Smoke tests for the repository template."""
 
-import app
+from pathlib import Path
 
 
-def test_template_smoke() -> None:
-    assert app.__doc__ is not None
+def test_repo_has_pyproject() -> None:
+    assert (Path(__file__).parent.parent / "pyproject.toml").is_file()

@@ -24,11 +24,22 @@ dev = [
   "yamllint",
   # JSON schema validation
   "check-jsonschema",
+  "pytest-cov>=7.1.0",
 ]
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/app"]
+# No [build-system]: uv treats this as a virtual project (deps only, the
+# project itself is not built or installed). Restore hatchling + a wheel
+# target once src/ gains a real package.
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[tool.ty.environment]
+python-version = "3.12"
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+# Raise once the project grows real code:
+# fail_under = 80

@@ -10,3 +10,6 @@ dist/
 build/
 *.egg-info/
 reports/
+.coverage
+coverage.xml
+htmlcov/

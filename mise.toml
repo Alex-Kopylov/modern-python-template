@@ -5,6 +5,7 @@ node = "22.22.0"
 "npm:jscpd" = "4.2.4"
 "npm:markdownlint-cli2" = "0.22.1"
 "aqua:01mf02/jaq" = "2.3.0"
+"aqua:gitleaks/gitleaks" = "8.30.1"
 "aqua:hadolint/hadolint" = "2.14.0"
 "aqua:koalaman/shellcheck" = "0.11.0"
 "aqua:rhysd/actionlint" = "1.7.11"
@@ -27,6 +28,7 @@ run = [
     "lint-sh",
     "lint-github-actions",
     "lint-duplicates",
+    "lint-secrets",
   ] },
 ]
 
@@ -114,9 +116,17 @@ uv run check-jsonschema --builtin-schema github-workflows $files
 description = "Detect duplicated code"
 run = "jscpd --config .jscpd.json --threshold 5"
 
+[tasks.lint-secrets]
+description = "Scan git history for leaked secrets"
+run = "gitleaks git --redact --no-banner"
+
 [tasks.test]
 description = "Run the pytest suite"
 run = "uv run pytest tests/"
+
+[tasks.test-cov]
+description = "Run the pytest suite with a coverage report"
+run = "uv run pytest tests/ --cov --cov-report=term-missing"
 
 [tasks.format]
 description = "Format and autofix Python code"
