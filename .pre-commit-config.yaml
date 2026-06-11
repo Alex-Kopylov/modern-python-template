@@ -94,7 +94,7 @@ repos:
       # === PHASE 10: DUPLICATES ===
       - id: jscpd
         name: jscpd (duplicates)
-        entry: mise exec -- npm run lint:duplicates --
+        entry: mise exec -- jscpd --config .jscpd.json --threshold 5
         language: system
         files: \.(py|sh|yaml|yml|ts|tsx|js|jsx|mjs|cjs|css)$
         pass_filenames: false

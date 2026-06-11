@@ -9,7 +9,7 @@ repo direction is clear.
 ## Commands
 
 - `mise install`: install mise-managed tools.
-- `mise run install`: install Python and Node tool dependencies.
+- `mise run install`: install Python project dependencies.
 - `mise run lint`: run configured lint targets in parallel.
 - `mise run format`: apply Ruff formatting and autofixes for `src` and
   `tests`.
@@ -23,8 +23,8 @@ repo direction is clear.
 - Python dependency and command execution goes through `uv`.
 - Project task orchestration and native CLI tooling go through `mise.toml`;
   run `mise install` before invoking native linters directly.
-- Node-based lint tools are pinned in `package.json` and installed with
-  `npm ci`.
+- Node-based lint CLIs are pinned in `mise.toml` through mise's npm backend
+  and installed with `mise install`.
 
 ## Workflow
 

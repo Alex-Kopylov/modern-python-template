@@ -2,6 +2,8 @@
 python = "3.12"
 uv = "latest"
 node = "22.22.0"
+"npm:jscpd" = "4.2.4"
+"npm:markdownlint-cli2" = "0.22.1"
 "aqua:01mf02/jaq" = "2.3.0"
 "aqua:hadolint/hadolint" = "2.14.0"
 "aqua:koalaman/shellcheck" = "0.11.0"
@@ -9,11 +11,8 @@ node = "22.22.0"
 "aqua:tamasfe/taplo" = "0.10.0"
 
 [tasks.install]
-description = "Install project and development dependencies"
-run = [
-  "uv sync --all-extras",
-  "npm ci",
-]
+description = "Install Python project dependencies"
+run = "uv sync --all-extras"
 
 [tasks.lint]
 description = "Run all configured linters in parallel"
@@ -57,7 +56,7 @@ done
 
 [tasks.lint-md]
 description = "Lint Markdown files"
-run = "npm run lint:md"
+run = "markdownlint-cli2"
 
 [tasks.lint-yml]
 description = "Lint YAML files"
@@ -113,7 +112,7 @@ uv run check-jsonschema --builtin-schema github-workflows $files
 
 [tasks.lint-duplicates]
 description = "Detect duplicated code"
-run = "npm run lint:duplicates"
+run = "jscpd --config .jscpd.json --threshold 5"
 
 [tasks.test]
 description = "Run the pytest suite"
