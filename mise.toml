@@ -1,5 +1,5 @@
 [tools]
-python = "3.12"
+python = "3.14.6"
 uv = "latest"
 node = "22.22.0"
 "npm:jscpd" = "4.2.4"

@@ -2,7 +2,8 @@
 name = "ai-template"
 version = "0.1.0"
 description = "Project description"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
+license = "MIT"
 dependencies = []
 
 [dependency-groups]
@@ -32,7 +33,7 @@ dev = [
 # target once src/ gains a real package.
 
 [tool.ty.environment]
-python-version = "3.12"
+python-version = "3.14"
 
 [tool.coverage.run]
 source = ["src"]
