@@ -245,14 +245,14 @@ wheels = [
 
 [[package]]
 name = "flake8-async"
-version = "26.4.2"
+version = "26.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "libcst" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/11/c9/b6aeb2986431033054ccb6491ec2a434de65cb0983c85b09937f426510b8/flake8_async-26.4.2.tar.gz", hash = "sha256:ced139a1d2b2073a916c34606eb0eb7264dc3acf2383989908cee08aaacea2c8", size = 130070, upload-time = "2026-05-01T21:08:30.661Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/69/6b/3df8b94ff231159f992c147fbece0776914be4c8966b384d0e5afabc4f50/flake8_async-26.6.1.tar.gz", hash = "sha256:cffcad750d60237b873a64de9fd75d770ce66e3716cfa6f8691c27ba8a01d6c4", size = 130732, upload-time = "2026-06-04T03:50:02.904Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/ba/c4301268ba953c2c70544562fa722ef7b2d8216ebade8346015c8a4c1daf/flake8_async-26.4.2-py3-none-any.whl", hash = "sha256:7de9926851da5641b2607962cb273cc3787cb39adaf7d2b5036920fa192cb647", size = 63393, upload-time = "2026-05-01T21:08:29.584Z" },
+    { url = "https://files.pythonhosted.org/packages/ed/bc/058597cd81331697ffb4ade95492e94be0ea849708ecf9366183e0ae4374/flake8_async-26.6.1-py3-none-any.whl", hash = "sha256:6241af62968c9a7b32787fed85b4ceaa6ebd045a77beb0d068344775f04e908b", size = 63682, upload-time = "2026-06-04T03:50:01.758Z" },
 ]
 
 [[package]]
