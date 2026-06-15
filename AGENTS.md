@@ -16,7 +16,6 @@ repo direction is clear.
 - `mise run test`: run the pytest suite under `tests`.
 - `mise run test-cov`: run the pytest suite with a coverage report.
 - `mise run install-hooks`: install pre-commit and pre-push hooks.
-- `make <target>` delegates to `mise run <target>` for compatibility.
 
 ## Tooling
 
