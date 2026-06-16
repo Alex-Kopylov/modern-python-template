@@ -1,4 +1,4 @@
-# ai-template
+# modern-python-template
 
 Python 3.14.6 project template: uv, mise, ruff, ty, pytest, pre-commit,
 gitleaks, and a GitHub Actions CI pipeline.
