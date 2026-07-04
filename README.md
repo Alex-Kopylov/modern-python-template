@@ -1,9 +1,26 @@
-# modern-python-template
+# ai-ready-modern-python-template
 
-Python 3.14.6 project template: uv, mise, ruff, ty, pytest, prek,
-gitleaks, and a GitHub Actions CI pipeline.
+An AI-ready Python 3.14.6 project template for fast, low-friction,
+high-confidence development.
 
-Proper documentation will be written later.
+This template is built for developers who use AI coding assistants and want the
+project to catch low-quality changes early. It combines a pinned toolchain,
+fast dependency management, strict linting, tests, hooks, secret scanning, and
+GitHub Actions so generated code gets immediate feedback before it reaches
+manual review.
+
+The goal is simple: after the configured checks pass, manual review should be
+focused on product intent and architecture instead of formatting, obvious bugs,
+unsafe patterns, or missing quality gates. Ideally, generated changes should not
+need mechanical cleanup once the linters and tests are green.
+
+## What this template optimizes for
+
+- Fast setup with `uv` and `mise`.
+- Reproducible local and CI tooling.
+- Early feedback for common AI-generated code issues.
+- One aggregate lint command for local use, hooks, and CI.
+- Guardrails that reduce the need for constant human supervision.
 
 ## Quick start
 
