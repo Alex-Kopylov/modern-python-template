@@ -10,7 +10,9 @@ repo direction is clear.
 
 - `mise install`: install mise-managed tools.
 - `mise run install`: install Python project dependencies.
-- `mise run lint`: run configured lint targets in parallel.
+- `mise run lint-fast`: run edit-safe lint targets for active development.
+- `mise run lint`: run the full lint gate used by CI.
+- `mise run lint-full`: explicit name for the full lint gate.
 - `mise run format`: apply Ruff formatting and autofixes for `src` and
   `tests`.
 - `mise run test`: run the pytest suite under `tests`.
@@ -30,9 +32,11 @@ repo direction is clear.
 ## Workflow
 
 - Prefer the existing `mise run` tasks before invoking tools directly.
-- Treat `mise run lint` as the default local/CI lint contract.
-- Treat `.pre-commit-config.yaml` as the commit-time guardrail surface; a hook
-  may be intentionally commit-only when it is useful before committing but too
-  noisy for the default aggregate.
+- Use `mise run lint-fast` for active editing and agent feedback loops.
+- Use `mise run lint` before final validation; it is the full local/CI lint
+  gate.
+- Treat `.pre-commit-config.yaml` as the commit-time guardrail surface. Checks
+  that can block commits should also be covered by `mise run lint-full` unless
+  there is a documented exception.
 - Keep generated or project-specific automation out of shared config unless the
   supporting scripts are committed too.

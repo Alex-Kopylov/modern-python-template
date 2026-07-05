@@ -1,9 +1,8 @@
 # prek hooks for code quality enforcement
 #
-# STRATEGY: mise remains the single source of truth for default local/CI lint
-# tasks, while prek owns commit-time guardrails. Most hooks route into the same
-# uv/mise-managed tools; hook-only checks are allowed when they would be too
-# noisy or context-sensitive for the default aggregate.
+# STRATEGY: mise owns fast/full lint task groups, while prek owns commit-time
+# guardrails. Checks that can block commits should also be represented in
+# `mise run lint-full` unless there is a documented exception.
 #
 # All tools are invoked through:
 #  - mise exec -- <tool>  (for system tools)
@@ -12,8 +11,8 @@
 #
 # This ensures:
 #  1. Tool versions stay managed by mise or uv, not hook-local environments
-#  2. Default lint behavior stays visible in `mise.toml`
-#  3. Hook-only checks are explicit and easy to audit
+#  2. Fast and full lint behavior stays visible in `mise.toml`
+#  3. Commit-time checks stay explicit and easy to audit
 #
 # Install: uv add --dev prek
 #   && uv run prek install --hook-type pre-commit --hook-type pre-push

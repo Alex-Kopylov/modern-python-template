@@ -29,3 +29,18 @@ def test_template_scaffold_files_are_present() -> None:
     assert (ROOT / "Dockerfile").is_file()
     assert (ROOT / ".dockerignore").is_file()
     assert (ROOT / ".github" / "dependabot.yml").is_file()
+
+
+def test_lint_strategy_tasks_are_split() -> None:
+    mise = tomllib.loads((ROOT / "mise.toml").read_text())
+
+    assert (ROOT / "docs" / "lint-strategy.md").is_file()
+    assert mise["tasks"]["lint"]["run"][0]["tasks"] == ["lint-full"]
+
+    fast_tasks = set(mise["tasks"]["lint-fast"]["run"][0]["tasks"])
+    full_tasks = set(mise["tasks"]["lint-full"]["run"][0]["tasks"])
+
+    assert "lint-python-fast" in fast_tasks
+    assert "lint-deps" not in fast_tasks
+    assert "lint-fast" in full_tasks
+    assert "lint-deps" in full_tasks

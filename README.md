@@ -19,20 +19,17 @@ need mechanical cleanup once the linters and tests are green.
 - Fast setup with `uv` and `mise`.
 - Reproducible local and CI tooling.
 - Early feedback for common AI-generated code issues.
-- One aggregate lint command for local use and CI, plus explicit commit-time
-  guardrails.
+- Separate fast and full lint commands for active editing versus final gates.
 - Guardrails that reduce the need for constant human supervision.
 
 ## Check surfaces
 
-- `mise run lint` is the default local and CI lint contract. Keep it stable,
-  deterministic, and low-noise.
-- `.pre-commit-config.yaml` owns commit-time guardrails. It can include
-  additional checks that are useful before saving a commit but too
-  context-sensitive for the default aggregate.
-- `deptry` is intentionally commit-hook-only: dependency-declaration checks are
-  useful at commit time, but can be noisy while an agent is still staging a
-  broader dependency or deployment change.
+- `mise run lint-fast` is safe for active editing and agent feedback loops.
+- `mise run lint` runs the full local and CI lint gate.
+- `.pre-commit-config.yaml` owns commit-time guardrails.
+
+See [docs/lint-strategy.md](docs/lint-strategy.md) for the policy behind this
+split.
 
 ## Quick start
 
@@ -40,6 +37,7 @@ need mechanical cleanup once the linters and tests are green.
 mise install            # install pinned tools
 mise run install        # install Python dependencies
 mise run install-hooks  # install prek-managed pre-commit and pre-push hooks
-mise run lint           # run all linters in parallel
+mise run lint-fast      # run edit-safe linters
+mise run lint           # run the full lint gate
 mise run test           # run the pytest suite
 ```

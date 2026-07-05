@@ -44,10 +44,16 @@ description = "Install Python project dependencies"
 run = "uv sync --all-extras"
 
 [tasks.lint]
-description = "Run all configured linters in parallel"
+description = "Run the full lint suite"
+run = [
+  { tasks = ["lint-full"] },
+]
+
+[tasks.lint-fast]
+description = "Run fast, edit-safe linters"
 run = [
   { tasks = [
-    "lint-python",
+    "lint-python-fast",
     "lint-dockerfile",
     "lint-md",
     "lint-yml",
@@ -55,19 +61,44 @@ run = [
     "lint-toml",
     "lint-sh",
     "lint-github-actions",
-    "lint-duplicates",
-    "lint-secrets",
-    "lint-audit",
     "lint-typos",
   ] },
 ]
 
+[tasks.lint-full]
+description = "Run fast linters plus whole-project gate checks"
+run = [
+  { tasks = [
+    "lint-fast",
+    "lint-python-deep",
+    "lint-deps",
+    "lint-duplicates",
+    "lint-secrets",
+    "lint-audit",
+    "lint-gha-security",
+  ] },
+]
+
 [tasks.lint-python]
-description = "Lint, format-check, type-check, and scan Python code"
+description = "Run all Python lint checks"
+run = [
+  { tasks = [
+    "lint-python-fast",
+    "lint-python-deep",
+  ] },
+]
+
+[tasks.lint-python-fast]
+description = "Run fast Python checks"
 run = [
   "uv run ruff check src tests",
   "uv run ruff format --check src tests",
   "uv run flake8 src",
+]
+
+[tasks.lint-python-deep]
+description = "Run whole-project Python analysis"
+run = [
   "uv run ty check src",
   "uv run vulture --config .vulture.toml",
 ]
@@ -144,6 +175,10 @@ uv run check-jsonschema --builtin-schema github-workflows $files
 [tasks.lint-duplicates]
 description = "Detect duplicated code"
 run = "mise exec -- jscpd --config .jscpd.json --threshold 5"
+
+[tasks.lint-deps]
+description = "Check Python dependency declarations"
+run = "uv run deptry ."
 
 [tasks.lint-secrets]
 description = "Scan git history for leaked secrets"
