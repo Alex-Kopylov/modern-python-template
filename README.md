@@ -22,10 +22,13 @@ need mechanical cleanup once the checks and tests are green.
 - Documented quality gates for active editing and final validation.
 - Guardrails that reduce the need for constant human supervision.
 
-## Quality Checks
+## Documentation
 
-See [docs/lint-strategy.md](docs/lint-strategy.md) for lint command groups,
-commit hooks, and CI policy.
+- [Lint strategy](docs/lint-strategy.md): lint command groups, commit hooks,
+  and CI policy.
+- [Other modern Python tools](docs/other-modern-python-tools.md): tools that
+  may be useful when adapting this template to a concrete domain, package, or
+  team workflow.
 
 ## Quick start
 
