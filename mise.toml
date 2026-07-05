@@ -59,7 +59,6 @@ run = [
     "lint-yml",
     "lint-json",
     "lint-toml",
-    "lint-sh",
     "lint-github-actions",
     "lint-typos",
   ] },
@@ -90,15 +89,22 @@ run = [
 
 [tasks.lint-python-fast]
 description = "Run fast Python checks"
-run = "./scripts/mise/lint-python-fast.sh"
+run = [
+  "uv run ruff check src tests",
+  "uv run ruff format --check src tests",
+  "uv run flake8 src",
+]
 
 [tasks.lint-python-deep]
 description = "Run whole-project Python analysis"
-run = "./scripts/mise/lint-python-deep.sh"
+run = [
+  "uv run ty check src",
+  "uv run vulture --config .vulture.toml",
+]
 
 [tasks.lint-dockerfile]
 description = "Lint Dockerfiles with Hadolint"
-run = "./scripts/mise/lint-dockerfile.sh"
+run = "mise exec -- hadolint Dockerfile"
 
 [tasks.lint-md]
 description = "Lint Markdown files"
@@ -110,19 +116,18 @@ run = "uv run yamllint -c .yamllint ."
 
 [tasks.lint-json]
 description = "Validate JSON syntax with jaq"
-run = "./scripts/mise/lint-json.sh"
+run = "mise exec -- jaq empty .jscpd.json"
 
 [tasks.lint-toml]
 description = "Lint TOML files with Taplo"
-run = "./scripts/mise/lint-toml.sh"
-
-[tasks.lint-sh]
-description = "Lint shell scripts with ShellCheck"
-run = "./scripts/mise/lint-sh.sh"
+run = "mise exec -- taplo lint"
 
 [tasks.lint-github-actions]
 description = "Lint GitHub Actions workflow files"
-run = "./scripts/mise/lint-github-actions.sh"
+run = [
+  "mise exec -- actionlint",
+  "uv run check-jsonschema --builtin-schema github-workflows .github/workflows/ci.yml",
+]
 
 [tasks.lint-duplicates]
 description = "Detect duplicated code"
@@ -138,7 +143,7 @@ run = "mise exec -- gitleaks git --redact --no-banner"
 
 [tasks.lint-gha-security]
 description = "Scan GitHub Actions workflows for security issues"
-run = "./scripts/mise/lint-gha-security.sh"
+run = "mise exec -- zizmor .github/workflows/ci.yml"
 
 [tasks.lint-audit]
 description = "Scan Python dependencies for known CVEs"
@@ -149,16 +154,19 @@ description = "Scan for spelling mistakes"
 run = "mise exec -- typos"
 
 [tasks.test]
-description = "Run product tests when present"
-run = "./scripts/mise/test.sh"
+description = "Run the pytest suite"
+run = "uv run pytest tests/"
 
 [tasks.test-cov]
-description = "Run product tests with a coverage report when present"
-run = "./scripts/mise/test.sh --coverage"
+description = "Run the pytest suite with a coverage report"
+run = "uv run pytest tests/ --cov --cov-report=term-missing"
 
 [tasks.format]
 description = "Format and autofix Python code"
-run = "./scripts/mise/format-python.sh"
+run = [
+  "uv run ruff format src tests",
+  "uv run ruff check --fix src tests",
+]
 
 [tasks.install-hooks]
 description = "Install prek-managed pre-commit and pre-push hooks"

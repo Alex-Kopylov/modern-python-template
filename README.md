@@ -36,5 +36,5 @@ need mechanical cleanup once the checks and tests are green.
 mise install            # install pinned tools
 mise run install        # install Python dependencies
 mise run install-hooks  # install prek-managed pre-commit and pre-push hooks
-mise run test           # run the pytest suite
+mise run lint           # run the full lint gate
 ```

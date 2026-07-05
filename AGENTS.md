@@ -13,10 +13,11 @@ repo direction is clear.
 - `mise run lint-fast`: run edit-safe lint targets for active development.
 - `mise run lint`: run the full lint gate used by CI.
 - `mise run lint-full`: explicit name for the full lint gate.
-- `mise run format`: apply Ruff formatting and autofixes for existing Python
-  paths.
-- `mise run test`: run product tests when present.
-- `mise run test-cov`: run product tests with a coverage report when present.
+- `mise run format`: apply Ruff formatting and autofixes for `src`.
+- `mise run test`: run pytest after real product tests are added under
+  `tests`.
+- `mise run test-cov`: run pytest with coverage after real product tests are
+  added under `tests`.
 - `mise run install-hooks`: install prek-managed pre-commit and pre-push hooks.
 
 ## Tooling

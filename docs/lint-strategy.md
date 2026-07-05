@@ -34,7 +34,7 @@ Fast lint is the right place for:
 - Syntax and style checks.
 - File-local Python linting.
 - Configuration syntax checks.
-- Markdown, YAML, JSON, TOML, shell, Dockerfile, and GitHub Actions validation.
+- Markdown, YAML, JSON, TOML, Dockerfile, and GitHub Actions validation.
 - Spelling checks when the project accepts that spelling lint may flag prose.
 
 Use fast lint for editor integrations, agent inner loops, and quick local
