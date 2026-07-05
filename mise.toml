@@ -90,17 +90,36 @@ run = [
 
 [tasks.lint-python-fast]
 description = "Run fast Python checks"
-run = [
-  "uv run ruff check src tests",
-  "uv run ruff format --check src tests",
-  "uv run flake8 src",
-]
+run = '''
+python_files=$(find src tests -type f -name '*.py' 2>/dev/null)
+if [ -z "$python_files" ]; then
+  echo "No Python files to lint"
+  exit 0
+fi
+
+uv run ruff check $python_files
+uv run ruff format --check $python_files
+
+src_python_files=$(find src -type f -name '*.py' 2>/dev/null)
+if [ -z "$src_python_files" ]; then
+  echo "No src Python files for flake8"
+  exit 0
+fi
+uv run flake8 $src_python_files
+'''
 
 [tasks.lint-python-deep]
 description = "Run whole-project Python analysis"
 run = [
-  "uv run ty check src",
-  "uv run vulture --config .vulture.toml",
+  '''
+  src_python_files=$(find src -type f -name '*.py' 2>/dev/null)
+  if [ -z "$src_python_files" ]; then
+    echo "No src Python files for whole-project analysis"
+    exit 0
+  fi
+  uv run ty check src
+  uv run vulture --config .vulture.toml
+  ''',
 ]
 
 [tasks.lint-dockerfile]
@@ -208,19 +227,36 @@ description = "Scan for spelling mistakes"
 run = "mise exec -- typos"
 
 [tasks.test]
-description = "Run the pytest suite"
-run = "uv run pytest tests/"
+description = "Run product tests when present"
+run = '''
+if [ ! -d tests ] || ! find tests -type f \( -name 'test_*.py' -o -name '*_test.py' \) | grep -q .; then
+  echo "No product tests to run"
+  exit 0
+fi
+uv run pytest tests/
+'''
 
 [tasks.test-cov]
-description = "Run the pytest suite with a coverage report"
-run = "uv run pytest tests/ --cov --cov-report=term-missing"
+description = "Run product tests with a coverage report when present"
+run = '''
+if [ ! -d tests ] || ! find tests -type f \( -name 'test_*.py' -o -name '*_test.py' \) | grep -q .; then
+  echo "No product tests to run"
+  exit 0
+fi
+uv run pytest tests/ --cov --cov-report=term-missing
+'''
 
 [tasks.format]
 description = "Format and autofix Python code"
-run = [
-  "uv run ruff format src tests",
-  "uv run ruff check --fix src tests",
-]
+run = '''
+python_files=$(find src tests -type f -name '*.py' 2>/dev/null)
+if [ -z "$python_files" ]; then
+  echo "No Python files to format"
+  exit 0
+fi
+uv run ruff format $python_files
+uv run ruff check --fix $python_files
+'''
 
 [tasks.install-hooks]
 description = "Install prek-managed pre-commit and pre-push hooks"

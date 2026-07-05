@@ -13,10 +13,10 @@ repo direction is clear.
 - `mise run lint-fast`: run edit-safe lint targets for active development.
 - `mise run lint`: run the full lint gate used by CI.
 - `mise run lint-full`: explicit name for the full lint gate.
-- `mise run format`: apply Ruff formatting and autofixes for `src` and
-  `tests`.
-- `mise run test`: run the pytest suite under `tests`.
-- `mise run test-cov`: run the pytest suite with a coverage report.
+- `mise run format`: apply Ruff formatting and autofixes for existing Python
+  paths.
+- `mise run test`: run product tests when present.
+- `mise run test-cov`: run product tests with a coverage report when present.
 - `mise run install-hooks`: install prek-managed pre-commit and pre-push hooks.
 
 ## Tooling
@@ -34,5 +34,8 @@ repo direction is clear.
 - Prefer the existing `mise run` tasks before invoking tools directly.
 - Follow `docs/lint-strategy.md` for lint group placement and command
   selection.
+- Temporary ad hoc tests are fine while developing or debugging. Remove them
+  before committing; only tests that verify actual product behavior should stay
+  in git history.
 - Keep generated or project-specific automation out of shared config unless the
   supporting scripts are committed too.
