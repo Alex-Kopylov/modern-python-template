@@ -10,9 +10,10 @@ repo direction is clear.
 
 - `mise install`: install mise-managed tools.
 - `mise run install`: install Python project dependencies.
-- `mise run lint`: run configured lint targets in parallel.
-- `mise run format`: apply Ruff formatting and autofixes for `src` and
-  `tests`.
+- `mise run lint-fast`: run edit-safe lint targets for active development.
+- `mise run lint`: run the full lint gate used by CI.
+- `mise run lint-full`: explicit name for the full lint gate.
+- `mise run format`: apply Ruff formatting and autofixes for `src`.
 - `mise run test`: run the pytest suite under `tests`.
 - `mise run test-cov`: run the pytest suite with a coverage report.
 - `mise run install-hooks`: install prek-managed pre-commit and pre-push hooks.
@@ -25,9 +26,16 @@ repo direction is clear.
   run `mise install` before invoking native linters directly.
 - Node-based lint CLIs are pinned in `mise.toml` through mise's npm backend
   and installed with `mise install`.
-  
+
 ## Workflow
 
 - Prefer the existing `mise run` tasks before invoking tools directly.
+- Follow `docs/lint-strategy.md` for lint group placement and command
+  selection.
+- Do not make lint or test tasks silently pass when configured paths are
+  missing; restore the path or update the configuration instead.
+- Temporary ad hoc tests are fine while developing or debugging. Remove them
+  before committing; only tests that verify actual product behavior should stay
+  in git history.
 - Keep generated or project-specific automation out of shared config unless the
   supporting scripts are committed too.
