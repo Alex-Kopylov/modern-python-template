@@ -32,11 +32,7 @@ repo direction is clear.
 ## Workflow
 
 - Prefer the existing `mise run` tasks before invoking tools directly.
-- Use `mise run lint-fast` for active editing and agent feedback loops.
-- Use `mise run lint` before final validation; it is the full local/CI lint
-  gate.
-- Treat `.pre-commit-config.yaml` as the commit-time guardrail surface. Checks
-  that can block commits should also be covered by `mise run lint-full` unless
-  there is a documented exception.
+- Follow `docs/lint-strategy.md` for lint group placement and command
+  selection.
 - Keep generated or project-specific automation out of shared config unless the
   supporting scripts are committed too.
