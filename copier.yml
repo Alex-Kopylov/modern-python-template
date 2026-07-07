@@ -1,0 +1,130 @@
+_subdirectory: template
+_answers_file: .copier-answers.yml
+_min_copier_version: "9.1.0"
+
+_message_after_copy: |
+  Next steps:
+
+    cd {{ project_name }}
+    git init
+    git add .
+    git commit -m "chore: initial project from template"
+    mise install
+    mise run install
+    mise run install-hooks
+    mise run lint
+
+  The project intentionally starts without uv.lock. The first sync or lock
+  command creates it; commit uv.lock with the generated project.
+
+project_name:
+  type: str
+  help: Project directory and display name.
+  default: my-project
+  validator: >-
+    {% if not project_name.strip() %}
+    Project name cannot be empty.
+    {% endif %}
+
+package_name:
+  type: str
+  help: Python import package name.
+  default: "{{ project_name | lower | replace('-', '_') | replace(' ', '_') }}"
+  validator: >-
+    {% if not (package_name | regex_search('^[a-z_][a-z0-9_]*$')) %}
+    Use a valid Python package name: lowercase letters, digits, and
+    underscores; start with a letter or underscore.
+    {% endif %}
+
+project_description:
+  type: str
+  help: Short project description for README and package metadata.
+  default: Project description
+
+setup_mode:
+  type: str
+  help: Choose the setup path.
+  choices:
+    "Quick - recommended defaults: Python 3.14, Docker, GitHub Actions, all linters, MIT": quick
+    "Custom - configure features in depth": custom
+  default: quick
+
+python_version:
+  type: str
+  help: Python minor version for requires-python, ty, mise, and .python-version.
+  choices:
+    "3.12": "3.12"
+    "3.13": "3.13"
+    "3.14": "3.14"
+  default: "3.14"
+  when: "{{ setup_mode == 'custom' }}"
+
+license:
+  type: str
+  help: Project license.
+  choices:
+    MIT: MIT
+    Apache-2.0: Apache-2.0
+    Proprietary: Proprietary
+  default: MIT
+  when: "{{ setup_mode == 'custom' }}"
+
+author_name:
+  type: str
+  help: Copyright holder for generated license files.
+  default: ""
+  when: "{{ setup_mode == 'custom' }}"
+
+is_package:
+  type: bool
+  help: Build and install the project package with hatchling.
+  default: false
+  when: "{{ setup_mode == 'custom' }}"
+
+use_docker:
+  type: bool
+  help: Include Dockerfile, Docker ignore file, and Hadolint gates.
+  default: true
+  when: "{{ setup_mode == 'custom' }}"
+
+use_github_actions:
+  type: bool
+  help: Include GitHub Actions CI and dependency update automation.
+  default: true
+  when: "{{ setup_mode == 'custom' }}"
+
+extra_linters:
+  type: str
+  help: Optional lint families to include.
+  multiselect: true
+  choices:
+    jscpd: jscpd
+    typos: typos
+    markdownlint: markdownlint
+  default:
+    - jscpd
+    - typos
+    - markdownlint
+  when: "{{ setup_mode == 'custom' }}"
+
+coverage_fail_under:
+  type: int
+  help: Minimum coverage percentage; 0 leaves the coverage gate off.
+  default: 0
+  validator: >-
+    {% if coverage_fail_under < 0 or coverage_fail_under > 100 %}
+    Use an integer from 0 to 100.
+    {% endif %}
+  when: "{{ setup_mode == 'custom' }}"
+
+python_version_pin:
+  type: str
+  default: >-
+    {% if python_version == '3.12' -%}
+    3.12.13
+    {%- elif python_version == '3.13' -%}
+    3.13.14
+    {%- else -%}
+    3.14.6
+    {%- endif %}
+  when: false

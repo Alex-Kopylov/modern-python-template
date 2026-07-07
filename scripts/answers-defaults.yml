@@ -1,0 +1,4 @@
+project_name: generated-defaults
+package_name: generated_defaults
+project_description: Generated project using quick defaults
+setup_mode: quick

@@ -106,6 +106,7 @@ repos:
         language: system
         types: [toml]
 
+{% if use_docker %}
       # === PHASE 9: DOCKERFILE ===
       - id: hadolint
         name: hadolint
@@ -113,6 +114,8 @@ repos:
         language: system
         files: (^|/)Dockerfile(\..*)?$|\.dockerfile$
 
+{% endif %}
+{% if use_github_actions %}
       # === PHASE 10: GITHUB ACTIONS SCHEMA ===
       - id: check-jsonschema-github-workflows
         name: check-jsonschema (GitHub Workflows)
@@ -134,6 +137,8 @@ repos:
         language: system
         files: ^\.github/workflows/.*\.ya?ml$
 
+{% endif %}
+{% if "jscpd" in extra_linters %}
       # === PHASE 12: DUPLICATES ===
       - id: jscpd
         name: jscpd (duplicates)
@@ -144,6 +149,7 @@ repos:
         stages: [pre-commit]
         verbose: true
 
+{% endif %}
   - repo: local
     hooks:
       # === PHASE 13: DEPENDENCY AUDIT ===
@@ -163,6 +169,7 @@ repos:
         pass_filenames: false
         stages: [pre-commit]
 
+{% if "typos" in extra_linters %}
       # === PHASE 14: SPELLING ===
       - id: typos
         name: typos (spelling)
@@ -171,6 +178,7 @@ repos:
         pass_filenames: false
         stages: [pre-commit]
 
+{% endif %}
 # === INTENTIONAL EXCLUSIONS ===
 # The following tools are useful in editor, agent, or CI workflows but NOT in hook runs:
 # - markdownlint-cli2: pass_filenames=false causes it to scan gitignored docs/plans/
