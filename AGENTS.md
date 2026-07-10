@@ -12,13 +12,13 @@ worktree unless that is explicitly requested as a separate task.
 
 ## Commands
 
-- `scripts/test-generation.sh scripts/answers-defaults.yml`: generate and gate
+- `scripts/test-generation.sh tests/fixtures/answers-defaults.yml`: generate and gate
   the quick-mode default project.
-- `scripts/test-generation.sh scripts/answers-everything-off.yml`: generate and
+- `scripts/test-generation.sh tests/fixtures/answers-everything-off.yml`: generate and
   gate the custom project with optional features disabled.
-- `scripts/test-generation.sh scripts/answers-everything-on.yml`: generate and
+- `scripts/test-generation.sh tests/fixtures/answers-everything-on.yml`: generate and
   gate the custom project with optional features enabled.
-- `scripts/test-generation.sh scripts/answers-github-actions-no-docker.yml`:
+- `scripts/test-generation.sh tests/fixtures/answers-github-actions-no-docker.yml`:
   generate and gate the mixed project with GitHub Actions enabled and Docker
   disabled.
 
@@ -41,8 +41,9 @@ Inside a generated project, the standard commands are:
   `uv`.
 - Project task orchestration and native CLI tooling in generated projects go
   through `mise.toml`.
-- The root repository intentionally does not keep a generated-project
-  `pyproject.toml`, `mise.toml`, `uv.lock`, `src/`, or `tests/`.
+- The root repository intentionally does not keep generated-project
+  `pyproject.toml`, `mise.toml`, `uv.lock`, `src/`, or Python tests. Root
+  `tests/fixtures/` contains only template-generation answer sets.
 
 ## Workflow
 

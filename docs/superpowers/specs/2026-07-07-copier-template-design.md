@@ -32,6 +32,8 @@ repo root/
 │   └── superpowers/specs/...          # this spec
 ├── scripts/
 │   └── test-generation.sh      # generate + gate a project locally; used by CI
+├── tests/fixtures/
+│   └── answers-*.yml           # template-generation matrix inputs
 ├── .github/workflows/ci.yml    # template CI (see below)
 └── template/                   # everything a generated project receives
     ├── pyproject.toml.jinja
@@ -56,8 +58,9 @@ repo root/
 ```
 
 - `uv.lock` is **not** templated. Generated projects create it via
-  `uv sync`/`uv lock`. Delete root `uv.lock`, `src/`, `tests/`,
-  `pyproject.toml` etc. as they move into `template/`.
+  `uv sync`/`uv lock`. Delete root generated-project `uv.lock`, `src/`, Python
+  tests, `pyproject.toml` etc. as they move into `template/`; keep only
+  template-generation answer sets under root `tests/fixtures/`.
 - Conditional files use copier filename conditions, e.g.
   `{% if use_docker %}Dockerfile{% endif %}` and
   `{% if use_github_actions %}.github{% endif %}/…`.

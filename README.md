@@ -75,10 +75,10 @@ quality-gate conventions where they fit.
 Use the local generation matrix before opening a PR:
 
 ```bash
-scripts/test-generation.sh scripts/answers-defaults.yml
-scripts/test-generation.sh scripts/answers-everything-off.yml
-scripts/test-generation.sh scripts/answers-everything-on.yml
-scripts/test-generation.sh scripts/answers-github-actions-no-docker.yml
+scripts/test-generation.sh tests/fixtures/answers-defaults.yml
+scripts/test-generation.sh tests/fixtures/answers-everything-off.yml
+scripts/test-generation.sh tests/fixtures/answers-everything-on.yml
+scripts/test-generation.sh tests/fixtures/answers-github-actions-no-docker.yml
 ```
 
 Root CI runs template linting plus the same four generated-project gates.
