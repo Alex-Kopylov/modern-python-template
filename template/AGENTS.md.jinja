@@ -22,7 +22,7 @@ shared quality gates without documenting the reason.
 
 - Use `jaq` instead of `jq` for JSON command-line work.
 - Python dependency and command execution goes through `uv`.
-- Hatchling builds the installed package from `src/{{ package_name }}`.
+- Hatchling builds the installed package from `src/{{ project_name }}`.
 - Project task orchestration and native CLI tooling go through `mise.toml`;
   run `mise install` before invoking native linters directly.
 - Docker and Hadolint are baseline. The Dockerfile deliberately keeps a

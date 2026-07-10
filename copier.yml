@@ -28,25 +28,8 @@ _message_after_copy: |
 
 project_name:
   type: str
-  help: Project directory and display name.
-  default: my-project
-  validator: >-
-    {% if (project_name | lower | replace('.', '_') | replace('-', '_')) in
-       ['and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue',
-        'def', 'del', 'elif', 'else', 'except',
-        'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is',
-        'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try',
-        'while', 'with', 'yield'] %}
-    The derived Python package name must not be a Python keyword.
-    {% elif not (project_name | regex_search('^[A-Za-z][A-Za-z0-9]*(?:[._-][A-Za-z0-9]+)*$')) %}
-    Start with a letter. Use letters and digits separated by single dots,
-    underscores, or dashes; do not end with a separator.
-    {% endif %}
-
-package_name:
-  type: str
-  default: "{{ project_name | lower | replace('.', '_') | replace('-', '_') }}"
-  when: false
+  help: Project, distribution, and Python package name.
+  default: my_project
 
 project_description:
   type: str

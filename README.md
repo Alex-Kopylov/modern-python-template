@@ -20,7 +20,7 @@ The wizard keeps project-shape choices small and explicit:
 
 | Question | Default | Purpose |
 | --- | --- | --- |
-| `project_name` | `my-project` | Distribution name and source of the import name |
+| `project_name` | `my_project` | Project, distribution, and Python package name |
 | `project_description` | `Project description` | README and package metadata |
 | `python_version` | `3.14` | Python, mise, Ruff, ty, and Docker |
 | `license` | `MIT` | MIT, Proprietary, or Skip |
@@ -29,11 +29,10 @@ The wizard keeps project-shape choices small and explicit:
 | `extra_linters` | all | jscpd, typos, and markdownlint |
 | `coverage_fail_under` | `80` | Coverage threshold; `0` disables the gate |
 
-The Python import package is computed rather than prompted. Names are lowercased
-and dots or dashes become underscores, so `My-Service` becomes `my_service` and
-`billing.api` becomes `billing_api`. Project names must start with a letter,
-cannot end with a separator, cannot repeat separators, and cannot derive a
-Python keyword.
+The same `project_name` is used for display text, distribution metadata, and
+the Python import package. Choose a valid Python package name such as
+`my_project`; naming mistakes surface when the generated project is installed,
+imported, or linted.
 
 Generated projects intentionally choose no application framework or runtime
 entrypoint. Add the framework, dependencies, and launch command that fit the

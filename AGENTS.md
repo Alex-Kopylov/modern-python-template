@@ -48,8 +48,7 @@ Inside a generated project, the standard commands are:
 - Docker, `.dockerignore`, Hadolint configuration, task, and hook are baseline.
 - `use_github_actions` is the only structural switch and controls the complete
   GitHub workflow, dependency automation, schema, and security bundle.
-- The import package name is derived deterministically from `project_name` and
-  is never prompted.
+- `project_name` is used unchanged for the distribution and import package.
 - The starter project and Docker command remain framework-neutral.
 
 ## Workflow

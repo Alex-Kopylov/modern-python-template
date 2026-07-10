@@ -59,23 +59,6 @@ render_project() {
   fi
 }
 
-expect_invalid_project_name() {
-  local project_name="$1"
-  local invalid_dir="${tmp_dir}/invalid-project"
-
-  rm -rf "$invalid_dir"
-  if uvx copier copy \
-    --quiet \
-    --defaults \
-    --vcs-ref=HEAD \
-    --data "project_name=${project_name}" \
-    "$repo_root" \
-    "$invalid_dir" 2>"$render_log"; then
-    fail "project_name=${project_name} must be rejected"
-  fi
-  assert_contains "$render_log" "Validation error for question 'project_name'"
-}
-
 obsolete_questions='setup''_mode|use''_docker|is''_package'
 assert_not_matches "${repo_root}/copier.yml" "^(${obsolete_questions}):"
 assert_not_contains "${repo_root}/copier.yml" "setup""_mode == 'custom'"
@@ -102,7 +85,6 @@ question_map="$({
 })"
 expected_question_map="$(printf '%s\n' \
   visible:project_name \
-  hidden:package_name \
   visible:project_description \
   visible:python_version \
   visible:license \
@@ -131,7 +113,7 @@ assert_not_matches \
 assert_not_matches "${default_dir}/.pytest.ini" '^[[:space:]]*pythonpath[[:space:]]='
 assert_file_present "${default_dir}/src/my_project/__init__.py"
 assert_file_present "${default_dir}/LICENSE"
-assert_contains "${default_dir}/LICENSE" 'Copyright (c) 2026 my-project'
+assert_contains "${default_dir}/LICENSE" 'Copyright (c) 2026 my_project'
 assert_not_contains "${default_dir}/Dockerfile" 'LABEL maintainer='
 assert_not_contains "${default_dir}/pyproject.toml" "fastapi"
 assert_not_contains "${default_dir}/pyproject.toml" "uvicorn"
@@ -257,26 +239,18 @@ assert_not_contains "${no_linters_dir}/.pre-commit-config.yaml" '      - id: typ
 
 printf 'ok -- optional linter selection can be empty\n'
 
-normalized_dir="${tmp_dir}/normalized-name"
-render_project "$normalized_dir" --data project_name=My-Service
-assert_file_present "${normalized_dir}/src/my_service/__init__.py"
-assert_file_present "${normalized_dir}/tests/unit/my_service/test_main.py"
+named_dir="${tmp_dir}/named-project"
+render_project "$named_dir" --data project_name=Acme_Project
+assert_file_present "${named_dir}/src/Acme_Project/__init__.py"
+assert_file_present "${named_dir}/tests/unit/Acme_Project/test_main.py"
 assert_contains \
-  "${normalized_dir}/tests/unit/my_service/test_main.py" \
-  'from my_service.main import main'
-assert_contains "${normalized_dir}/README.md" 'docker build -t my-service .'
+  "${named_dir}/tests/unit/Acme_Project/test_main.py" \
+  'from Acme_Project.main import main'
+assert_contains "${named_dir}/pyproject.toml" 'name = "Acme_Project"'
+assert_contains "${named_dir}/README.md" '# Acme_Project'
+assert_contains "${named_dir}/README.md" 'docker build -t Acme_Project .'
 
-dotted_dir="${tmp_dir}/dotted-name"
-render_project "$dotted_dir" --data project_name=billing.api
-assert_file_present "${dotted_dir}/src/billing_api/__init__.py"
-
-printf 'ok -- distribution names derive deterministic import packages\n'
-
-for invalid_name in 1service my..service my-service- class; do
-  expect_invalid_project_name "$invalid_name"
-done
-
-printf 'ok -- invalid and keyword-derived project names are rejected\n'
+printf 'ok -- one project name is used unchanged everywhere\n'
 
 if rg -n --hidden --glob '!.git' "$obsolete_questions" "$repo_root"; then
   fail "obsolete wizard concepts remain in the repository"

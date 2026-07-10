@@ -46,8 +46,8 @@ repo root/
     ├── Dockerfile.jinja
     ├── .dockerignore.jinja
     ├── .hadolint.yaml.jinja
-    ├── src/{{ package_name }}/
-    ├── tests/unit/{{ package_name }}/
+    ├── src/{{ project_name }}/
+    ├── tests/unit/{{ project_name }}/
     ├── conditional GitHub automation
     ├── conditional LICENSE
     └── conditional optional-linter configuration
@@ -70,7 +70,7 @@ The visible questions are:
 
 | Question | Type | Default | Purpose |
 | --- | --- | --- | --- |
-| `project_name` | string | `my-project` | Distribution and display name |
+| `project_name` | string | `my_project` | Project, distribution, and Python package name |
 | `project_description` | string | `Project description` | README and metadata |
 | `python_version` | string | `3.14` | Python, mise, Ruff, ty, and Docker |
 | `license` | choice | `MIT` | MIT, Proprietary, or Skip |
@@ -79,23 +79,11 @@ The visible questions are:
 | `extra_linters` | multiselect | all | jscpd, typos, and markdownlint |
 | `coverage_fail_under` | integer | `80` | Coverage threshold; zero disables it |
 
-`project_name` must match:
-
-```text
-^[A-Za-z][A-Za-z0-9]*(?:[._-][A-Za-z0-9]+)*$
-```
-
-It therefore begins with a letter, uses only letters and digits separated by a
-single dot, underscore, or dash, and never ends with a separator. The derived
-import name must not be a Python keyword.
-
-`package_name` is hidden computed state. It lowercases `project_name` and maps
-dots and dashes to underscores:
-
-```text
-My-Service → my_service
-billing.api → billing_api
-```
+`project_name` is used unchanged for display text, distribution metadata, the
+source directory, and Python imports. The wizard does not duplicate package and
+project naming or validate the answer; users should choose a valid Python
+package name, and mistakes surface during the generated project's install,
+import, or lint steps.
 
 Hidden `python_version_minor` supplies metadata, Ruff, ty, and the Docker base
 tag. Hidden `python_version_pin` preserves exact patch answers and maps known
@@ -111,10 +99,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 ```
 
-Hatchling discovers `src/{{ package_name }}` from the deterministic relationship
-between the normalized distribution name and import package. There is no
-explicit wheel-package table. Pytest does not inject `src` onto `sys.path`, so
-the suite exercises the installed project.
+Hatchling discovers `src/{{ project_name }}` because the distribution and import
+package use the same name. There is no explicit wheel-package table. Pytest does
+not inject `src` onto `sys.path`, so the suite exercises the installed project.
 
 License behavior remains:
 
@@ -174,8 +161,7 @@ generated toolchain. It covers:
 - Python 3.10 and an exact patch version;
 - disabled coverage gate;
 - empty optional-linter selection;
-- name normalization;
-- invalid and keyword-derived names;
+- unchanged project-name propagation;
 - complete GitHub automation on/off behavior;
 - unconditional packaging, Docker, and Hadolint.
 
@@ -200,7 +186,7 @@ its always-available Docker path, and only the automation that was rendered.
 Adoption into `github.com/Alex-Kopylov/sample_db` remains a separate repository,
 branch, and PR. Render from the local template with these project choices:
 
-- project name `sample-db` (import package derives to `sample_db`);
+- project name `sample_db`;
 - Python 3.12;
 - MIT license;
 - GitHub automation enabled;
