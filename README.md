@@ -117,3 +117,9 @@ The render contracts cover targeted wizard overrides without installing tools.
 The generation scenarios install and import the project, build its wheel, and
 run the full lint, test, coverage, and installed-hook gates. The optional second
 argument supplies a Python minor or exact patch for reusable version coverage.
+
+Root CI runs six explicit full-generation rows: both GitHub-automation profiles
+at the default Python 3.14, the Python 3.11.9 exact fixture, and minor inputs for
+3.10, 3.12, and 3.13. This covers every supported minor while preserving both
+default feature profiles. For matrix-only changes, run one representative new
+row locally; clean GitHub runners execute the complete matrix.
