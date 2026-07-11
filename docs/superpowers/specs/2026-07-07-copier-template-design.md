@@ -202,7 +202,7 @@ exact fixture; later version-coverage work extends the same matrix.
 ### Documentation
 
 The root README explains generation, the compact wizard, updates, adoption, and
-the three validation commands. Generated documentation describes the project,
+the validation commands. Generated documentation describes the project,
 its always-available Docker path, and only the automation that was rendered.
 
 ## Part 2 — `sample_db` adoption
