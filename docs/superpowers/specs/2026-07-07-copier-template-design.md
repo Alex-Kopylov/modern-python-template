@@ -81,9 +81,10 @@ The visible questions are:
 
 `project_name` is used unchanged for display text, distribution metadata, the
 source directory, and Python imports. The wizard does not duplicate package and
-project naming or validate the answer; users should choose a valid Python
-package name, and mistakes surface during the generated project's install,
-import, or lint steps.
+project naming. It rejects the standard, case-sensitive Python hard-keyword set
+but accepts soft keywords. Users should choose a valid Python package name;
+other mistakes surface during the generated project's install, import, or lint
+steps.
 
 Hidden `python_version_minor` supplies metadata, Ruff, and ty. Hidden
 `python_version_pin` preserves exact patch answers and maps known minor answers
@@ -165,6 +166,7 @@ generated toolchain. It covers:
 - disabled coverage gate;
 - empty optional-linter selection;
 - unchanged project-name propagation;
+- hard-keyword rejection and soft-keyword acceptance;
 - complete GitHub automation on/off behavior;
 - unconditional packaging, Docker, and Hadolint.
 
