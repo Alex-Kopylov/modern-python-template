@@ -103,6 +103,74 @@ assert_not_matches "${repo_root}/copier.yml" "^(${obsolete_questions}):"
 assert_not_contains "${repo_root}/copier.yml" "setup""_mode == 'custom'"
 assert_not_matches "${repo_root}/copier.yml" '^_tasks:'
 
+default_python_version="$(
+  awk '
+    $0 == "python_version:" { in_python_version = 1; next }
+    in_python_version && /^  default: / {
+      value = $0
+      sub(/^  default: /, "", value)
+      gsub(/"/, "", value)
+      print value
+      exit
+    }
+  ' "${repo_root}/copier.yml"
+)"
+[[ "$default_python_version" == 3.14 ]] ||
+  fail "expected default Python 3.14, found ${default_python_version}"
+
+generation_matrix="$(
+  awk '
+    /^          - label: / {
+      label = $0
+      sub(/^          - label: /, "", label)
+      next
+    }
+    /^            scenario: / {
+      scenario = $0
+      sub(/^            scenario: /, "", scenario)
+      next
+    }
+    /^            python_version: / {
+      version = $0
+      sub(/^            python_version: /, "", version)
+      gsub(/^"|"$/, "", version)
+      print label "|" scenario "|" version
+    }
+  ' "${repo_root}/.github/workflows/ci.yml"
+)"
+expected_generation_matrix="$(printf '%s\n' \
+  'github-actions-on / default Python|github-actions-on|' \
+  'github-actions-off / default Python|github-actions-off|' \
+  'github-actions-off / Python 3.11.9 exact|github-actions-off|3.11.9' \
+  'github-actions-off / Python 3.10 minor|github-actions-off|3.10' \
+  'github-actions-on / Python 3.12 minor|github-actions-on|3.12' \
+  'github-actions-on / Python 3.13 minor|github-actions-on|3.13')"
+[[ "$generation_matrix" == "$expected_generation_matrix" ]] || {
+  printf 'Expected generation matrix:\n%s\nActual generation matrix:\n%s\n' \
+    "$expected_generation_matrix" \
+    "$generation_matrix" >&2
+  fail "full-generation Python matrix changed"
+}
+
+matrix_python_minors="$(
+  awk -F '|' -v default_version="$default_python_version" '
+    {
+      version = $3 == "" ? default_version : $3
+      split(version, components, ".")
+      print components[1] "." components[2]
+    }
+  ' <<<"$generation_matrix" | sort -u
+)"
+expected_python_minors="$(printf '%s\n' 3.10 3.11 3.12 3.13 3.14)"
+[[ "$matrix_python_minors" == "$expected_python_minors" ]] || {
+  printf 'Expected Python minors:\n%s\nActual Python minors:\n%s\n' \
+    "$expected_python_minors" \
+    "$matrix_python_minors" >&2
+  fail "full-generation Python minor coverage changed"
+}
+
+printf 'ok -- full-generation matrix covers Python 3.10 through 3.14\n'
+
 question_map="$({
   awk '
     function emit_question() {

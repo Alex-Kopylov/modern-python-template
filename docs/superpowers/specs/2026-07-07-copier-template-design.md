@@ -182,6 +182,7 @@ generated toolchain. It covers:
 - invalid project-name shapes and valid identifier boundaries;
 - hard-keyword rejection and soft-keyword acceptance;
 - default and custom main-branch propagation;
+- the six-row root CI Python/profile matrix;
 - complete GitHub automation on/off behavior;
 - unconditional packaging, Docker, and Hadolint.
 
@@ -196,8 +197,12 @@ asserts its alignment, installs mise CLI tools and the uv-managed Python,
 asserts that mise does not provide Python, checks the requested/rendered/uv and
 virtual-environment versions agree, imports `my_project`, runs `uv build`, and
 passes lint, test, coverage, and installed hooks. Root CI uses an explicit
-include matrix for the two default profiles and the expert-mode Python 3.11.9
-exact fixture; later version-coverage work extends the same matrix.
+six-row include matrix: both default profiles use Python 3.14, the existing
+expert-mode fixture covers Python 3.11.9, and additional rows cover minor inputs
+3.10, 3.12, and 3.13. The three GitHub-actions-on and three
+GitHub-actions-off rows preserve balanced feature-profile coverage. Local
+verification runs one representative new row; clean GitHub runners execute all
+six full gates.
 
 ### Documentation
 
@@ -231,6 +236,8 @@ replace CI with the generated mise-based workflow, and retain
 - `scripts/test-generation.sh github-actions-on` passes.
 - `scripts/test-generation.sh github-actions-off` passes.
 - `scripts/test-generation.sh github-actions-off 3.11.9` passes.
+- `scripts/test-generation.sh github-actions-off 3.10` passes as the
+  representative added matrix row.
 - Root CI is green.
 - The separate `sample_db` branch passes its lint and test gates when that
   adoption is explicitly undertaken.
