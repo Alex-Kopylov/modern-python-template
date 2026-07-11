@@ -55,9 +55,11 @@ main_branch_name:
        or '//' in main_branch_name
        or '@{' in main_branch_name
        or main_branch_name == '@'
+       or main_branch_name == 'HEAD'
        or (main_branch_name | regex_search('(^|/)\\.|[/.]$|\\.lock($|/)')) %}
     Use a valid Git branch name without spaces, consecutive dots or slashes,
-    reflog syntax, dot-prefixed path components, or a .lock suffix.
+    reflog syntax, dot-prefixed path components, a .lock suffix, or the
+    reserved name HEAD.
     {% endif %}
 
 python_version:

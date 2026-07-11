@@ -222,6 +222,9 @@ assert_not_contains "${custom_branch_dir}/.github/workflows/ci.yml" '      - "ma
 assert_render_rejected \
   "${tmp_dir}/invalid-main-branch" \
   --data 'main_branch_name=feature branch'
+assert_render_rejected \
+  "${tmp_dir}/reserved-main-branch" \
+  --data main_branch_name=HEAD
 
 printf 'ok -- selected main branch reaches generated CI\n'
 
