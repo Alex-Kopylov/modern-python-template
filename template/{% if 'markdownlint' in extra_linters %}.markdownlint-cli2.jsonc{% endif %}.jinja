@@ -13,28 +13,14 @@
 {% if use_github_actions %}
     ".github/**/*.md",
 {% endif %}
-    "docs/**/*.md",
-    "README.md",
-    "CONTRIBUTING.md",
-    "LICENSE.md",
-    "CODE_OF_CONDUCT.md",
-    "CHANGELOG.md"
+    "docs/**/*.md"
   ],
 
-  // Exclusions (AI agent working files, working documents, build artifacts)
+  // Exclusions (AI instruction files and internal documentation)
   "ignores": [
     "CLAUDE.md",
     "AGENTS.md",
     "GEMINI.md",
-    ".claude/**",
-    ".codex/**",
-    ".cursor/**",
-    ".gemini/**",
-    ".venv/**",
-    "goals/**",
-    "node_modules/**",
-    "build/**",
-    "dist/**",
     "docs/specs/**",
     "docs/internal/**"
   ]
