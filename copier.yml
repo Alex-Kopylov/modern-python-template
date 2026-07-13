@@ -118,6 +118,13 @@ extra_linters:
     - typos
     - markdownlint
 
+parallel_testing:
+  type: bool
+  help: >-
+    Run pytest in parallel with pytest-xdist (-n auto); No uses pytest's
+    serial default.
+  default: true
+
 coverage_fail_under:
   type: int
   help: Minimum coverage percentage; 0 leaves the coverage gate off.
