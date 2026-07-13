@@ -71,15 +71,7 @@ expect_invalid_project_name() {
   local invalid_dir="${tmp_dir}/invalid-project-name"
 
   rm -rf "$invalid_dir"
-  if uvx copier copy \
-    --quiet \
-    --defaults \
-    --vcs-ref=HEAD \
-    --data "project_name=${project_name}" \
-    "$repo_root" \
-    "$invalid_dir" 2>"$render_log"; then
-    fail "project_name=${project_name} must be rejected"
-  fi
+  assert_render_rejected "$invalid_dir" --data "project_name=${project_name}"
   assert_contains "$render_log" "Validation error for question 'project_name'"
 }
 
