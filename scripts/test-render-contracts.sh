@@ -112,6 +112,16 @@ default_python_version="$(
 [[ "$default_python_version" == 3.14 ]] ||
   fail "expected default Python 3.14, found ${default_python_version}"
 
+generation_matrix_row_count="$(
+  sed -n '
+    /^        include:$/,/^    [^ ]/ {
+      /^          - /p
+    }
+  ' "${repo_root}/.github/workflows/ci.yml" | wc -l | tr -d '[:space:]'
+)"
+[[ "$generation_matrix_row_count" == 6 ]] ||
+  fail "expected 6 full-generation rows in the matrix include block, found ${generation_matrix_row_count}"
+
 generation_matrix="$(
   sed -n '
     /^        include:$/,/^    [^ ]/ {
