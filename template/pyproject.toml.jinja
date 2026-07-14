@@ -22,18 +22,18 @@ dev = [
   "deptry>=0.25.1",
   # Testing
   "pytest",
-  {% if parallel_testing -%}
+  {% if parallel_testing %}
   "pytest-xdist",
-  {% endif -%}
+  {% endif %}
   "pytest-cov>=7.1.0",
   # Git hooks
   "prek",
   # YAML linting
   "yamllint",
-  {% if use_github_actions -%}
+  {% if use_github_actions %}
   # JSON schema validation
   "check-jsonschema",
-  {% endif -%}
+  {% endif %}
 ]
 
 [build-system]
