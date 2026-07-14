@@ -244,6 +244,7 @@ expected_question_map="$(printf '%s\n' \
   visible:author_name \
   visible:use_github_actions \
   visible:extra_linters \
+  visible:parallel_testing \
   visible:coverage_fail_under \
   hidden:python_version_minor \
   hidden:python_version_pin)"
@@ -273,6 +274,8 @@ assert_not_matches \
 assert_file_present "${default_dir}/src/my_project/__init__.py"
 assert_file_present "${default_dir}/LICENSE"
 assert_contains "${default_dir}/LICENSE" 'Copyright (c) 2026 my_project'
+assert_contains "${default_dir}/pyproject.toml" '"pytest-xdist"'
+assert_contains "${default_dir}/.pytest.ini" '-n auto'
 assert_not_contains "${default_dir}/Dockerfile" 'LABEL maintainer='
 assert_not_contains "${default_dir}/pyproject.toml" "fastapi"
 assert_not_contains "${default_dir}/pyproject.toml" "uvicorn"
@@ -423,6 +426,14 @@ assert_not_matches \
   '^[[:space:]]*fail_under[[:space:]]='
 
 printf 'ok -- zero disables the coverage gate\n'
+
+serial_testing_dir="${tmp_dir}/serial-testing"
+render_project "$serial_testing_dir" --data parallel_testing=false
+assert_file_present "${serial_testing_dir}/.pytest.ini"
+assert_not_contains "${serial_testing_dir}/pyproject.toml" 'pytest-xdist'
+assert_not_contains "${serial_testing_dir}/.pytest.ini" '-n auto'
+
+printf 'ok -- parallel testing can be disabled\n'
 
 no_linters_dir="${tmp_dir}/no-optional-linters"
 render_project "$no_linters_dir" --data 'extra_linters=[]'
