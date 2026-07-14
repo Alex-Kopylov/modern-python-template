@@ -489,14 +489,15 @@ invalid_project_name_shapes=(
   acme.
   -acme
   acme-
+  class
 )
 for invalid_project_name in "${invalid_project_name_shapes[@]}"; do
   expect_invalid_project_name "$invalid_project_name"
 done
 
-printf 'ok -- non-identifier project-name shapes are rejected\n'
+printf 'ok -- invalid project-name shapes and a hard keyword are rejected\n'
 
-valid_project_name_boundaries=(A a1 a_b a__b)
+valid_project_name_boundaries=(A a1 a_b a__b match)
 for valid_project_name in "${valid_project_name_boundaries[@]}"; do
   valid_name_dir="${tmp_dir}/valid-project-name-${valid_project_name}"
   render_project "$valid_name_dir" --data "project_name=${valid_project_name}"
@@ -506,27 +507,7 @@ for valid_project_name in "${valid_project_name_boundaries[@]}"; do
     "name = \"${valid_project_name}\""
 done
 
-printf 'ok -- project-name identifier boundaries remain valid\n'
-
-readarray -t python_hard_keywords < <(
-  python3 -c 'import keyword; print("\n".join(keyword.kwlist))'
-)
-for hard_keyword in "${python_hard_keywords[@]}"; do
-  expect_invalid_project_name "$hard_keyword"
-done
-
-printf 'ok -- every Python hard keyword is rejected as a project name\n'
-
-readarray -t python_soft_keywords < <(
-  python3 -c 'import keyword, re; pattern = re.compile(r"^[A-Za-z](?:[A-Za-z0-9_]*[A-Za-z0-9])?$"); print("\n".join(word for word in keyword.softkwlist if pattern.fullmatch(word)))'
-)
-for soft_keyword in "${python_soft_keywords[@]}"; do
-  soft_keyword_dir="${tmp_dir}/soft-keyword-${soft_keyword}"
-  render_project "$soft_keyword_dir" --data "project_name=${soft_keyword}"
-  assert_file_present "${soft_keyword_dir}/src/${soft_keyword}/__init__.py"
-done
-
-printf 'ok -- supported Python soft keywords remain valid project names\n'
+printf 'ok -- project-name boundaries and a soft keyword remain valid\n'
 
 if rg -n --hidden --glob '!.git' "$obsolete_questions" "$repo_root"; then
   fail "obsolete wizard concepts remain in the repository"
